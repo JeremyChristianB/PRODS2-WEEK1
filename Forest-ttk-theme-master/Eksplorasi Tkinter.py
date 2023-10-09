@@ -1,24 +1,30 @@
+from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 
-def home_page():
-    home_frame = tk.Frame(main_frame)
-    
 
-    # Load background image buat main frame
-    background_image = Image.open("backgroundUtamaResized.jpg")  # Replace background image file
-    background_photo = ImageTk.PhotoImage(background_image)
-
-
-    # Create label dengan transparent background
-    title_label = tk.Label(home_frame, text='Reforestation', font=('Bold', 36), fg='green', highlightthickness=0)
-    title_label.pack()
+def klasifikasi_page():
+    klasifikasi_frame = tk.Frame(main_frame)
     
-    lb = tk.Label(home_frame, text='Home Page\n\nPage: 1', font=('Bold', 30))
-    lb.pack()
+    klasifikasi_frame.pack(pady=20, side=tk.RIGHT)  # Frame untuk elemen-elemen baru diletakkan di sebelah kanan
     
-    home_frame.pack(pady=20)
+    # Dropdown dengan judul "Daftar Daerah"
+    daftar_daerah_label = tk.Label(klasifikasi_frame, text='Daftar Daerah', font=('Helvetica', 16))
+    daftar_daerah_label.pack(pady=10)
+    
+    daerah_var = tk.StringVar()
+    daerah_dropdown = ttk.Combobox(klasifikasi_frame, textvariable=daerah_var,
+                                   values=['Jawa Barat', 'Jawa Tengah', 'Jawa Timur', 'Sumatera Barat', 'Sumatera Utara'])
+    daerah_dropdown.pack(pady=10)
+    
+    # Tombol "Choose Files"
+    choose_files_btn = tk.Button(klasifikasi_frame, text='Choose Files', font=('Helvetica', 14), command=choose_files)
+    choose_files_btn.pack(pady=10)
+    
+    # Tombol "Mulai Klasifikasi"
+    mulai_klasifikasi_btn = tk.Button(klasifikasi_frame, text='Mulai Klasifikasi', font=('Helvetica', 16), command=start_classification)
+    mulai_klasifikasi_btn.pack(pady=20)
     
 def about_page():
     about_frame = tk.Frame(main_frame)
@@ -28,18 +34,50 @@ def about_page():
     
     about_frame.pack(pady=20)
     
-def menu_page():
-    menu_frame = tk.Frame(main_frame)
-    
-    lb = tk.Label(menu_frame, text='Menu Page\n\nPage: 2', font=('Bold', 30))
-    lb.pack()
-    
-    menu_frame.pack(pady=20)
+def hitung_page():
+    hitung_frame = tk.Frame(main_frame)
+
+    # Frame untuk elemen-elemen baru diletakkan di sebelah kanan
+    hitung_frame.pack(padx=20, pady=20, side=tk.RIGHT)
+
+    # Frame untuk gambar (di sebelah kiri)
+    gambar_frame = tk.Frame(hitung_frame)
+    gambar_frame.pack(side=tk.LEFT)
+
+    # Isi frame gambar (contoh gambar)
+    contoh_gambar = Image.open("backgroundUtamaResized.png")  # Ganti dengan path ke gambar Anda
+    contoh_gambar = contoh_gambar.resize((200, 200), Image.ANTIALIAS)
+    contoh_gambar = ImageTk.PhotoImage(contoh_gambar)
+    gambar_label = tk.Label(gambar_frame, image=contoh_gambar)
+    gambar_label.image = contoh_gambar
+    gambar_label.pack(pady=10)
+
+    # Frame untuk deskripsi (di sebelah kanan)
+    deskripsi_frame = tk.Frame(hitung_frame, bg='white')
+    deskripsi_frame.pack(padx=20, pady=20, side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+    # Judul "Deskripsi"
+    judul_label = tk.Label(deskripsi_frame, text='Deskripsi',bg='green', font=('Helvetica', 12))
+    judul_label.pack(pady=10)
+
+    # Isi deskripsi
+    deskripsi_text = """
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Nullam non metus eget nunc facilisis varius. Proin bibendum,
+    justo in varius bibendum, neque justo consequat justo, id
+    pellentesque justo orci id mi.
+    """
+    deskripsi_label = tk.Label(deskripsi_frame,bg='green', text=deskripsi_text)
+    deskripsi_label.pack(pady=10)
+
+# ...
+
+
     
 
 def hide_indicators():
-    home_indicate.config(bg='#c3c3c3')
-    menu_indicate.config(bg='#c3c3c3')
+    klasifikasi_indicate.config(bg='#c3c3c3')
+    hitung_indicate.config(bg='#c3c3c3')
     about_indicate.config(bg='#c3c3c3')
     
 def delete_pages():
@@ -52,6 +90,16 @@ def indicate(lb, page):
     delete_pages()
     page()
 
+def choose_files():
+    # Fungsi yang akan dijalankan ketika tombol "Choose Files" ditekan
+    # Anda dapat menambahkan kode untuk memilih file di sini
+    pass
+
+def start_classification():
+    # Fungsi yang akan dijalankan ketika tombol "Mulai Klasifikasi" ditekan
+    # Anda dapat menambahkan kode untuk memulai klasifikasi di sini
+    pass
+
 root = tk.Tk()
 root.title("Dashboard Aplikasi")
 
@@ -63,23 +111,23 @@ ttk.Style().theme_use('forest-dark')
 
 options_frame = tk.Frame(root, bg='#c3c3c3')
 
-home_btn = tk.Button(options_frame, text='Home', font=('Bold', 15), fg='green', bd=0, bg='#c3c3c3',
-                     command=lambda: indicate(home_indicate, home_page)
+klasifikasi_btn = tk.Button(options_frame, text='Klasifikasi', font=('Bold', 15), fg='green', bd=0, bg='#c3c3c3',
+                     command=lambda: indicate(klasifikasi_indicate, klasifikasi_page)
                      )
 
-home_btn.place(x=10, y=50)
+klasifikasi_btn.place(x=2, y=50)
 
-home_indicate = tk.Label(options_frame, text='', bg='#c3c3c3')
-home_indicate.place(x=3, y=50, width=5, height=40) 
+klasifikasi_indicate = tk.Label(options_frame, text='', bg='#c3c3c3')
+klasifikasi_indicate.place(x=3, y=50, width=5, height=40) 
 
-menu_btn = tk.Button(options_frame, text='Menu', font=('Bold', 15), fg='green', bd=0, bg='#c3c3c3',
-                     command=lambda: indicate(menu_indicate, menu_page)
+hitung_btn = tk.Button(options_frame, text='Hitung', font=('Bold', 15), fg='green', bd=0, bg='#c3c3c3',
+                     command=lambda: indicate(hitung_indicate, hitung_page)
                      )
 
-menu_btn.place(x=10, y=100)
+hitung_btn.place(x=10, y=100)
 
-menu_indicate = tk.Label(options_frame, text='', bg='#c3c3c3')
-menu_indicate.place(x=3, y=100, width=5, height=40) 
+hitung_indicate = tk.Label(options_frame, text='', bg='#c3c3c3')
+hitung_indicate.place(x=3, y=100, width=5, height=40) 
 
 about_btn = tk.Button(options_frame, text='About', font=('Bold', 15), fg='green', bd=0, bg='#c3c3c3',
                       command=lambda: indicate(about_indicate, about_page)
@@ -97,20 +145,15 @@ options_frame.configure(width=100, height=400)
 main_frame = tk.Frame(root, highlightbackground='black', highlightthickness=2)
 
 # Load background image buat main frame
-background_image = Image.open("backgroundUtamaResized.jpg")  # Replace background image file
-background_photo = ImageTk.PhotoImage(background_image)
+background_image = PhotoImage(file="backgroundUtamaResized.png")  # Replace background image file
 
 # Create canvas untuk menaruh background image buat main frame
-background_canvas = tk.Canvas(main_frame, width=background_image.width, height=background_image.height)
-background_canvas.pack()
+background_canvas = tk.Canvas(main_frame, width=400, height=500)
+background_canvas.pack(fill='both',expand=True)
 
-# Create label untuk display background image
-background_label = tk.Label(background_canvas, image=background_photo)
-background_label.place(x=0, y=0, relwidth=1, relheight=1)
+background_canvas.create_image(0,0, image=background_image,anchor = 'nw')
 
-# Create label dengan transparent background
-title_label = tk.Label(background_canvas, text='Reforestation', font=('Bold', 36), fg='green', highlightthickness=0)
-title_label.place(x=20, y=20)
+background_canvas.create_text(130,40,text='Reforestation',font=('Helvetica',30))
 
 main_frame.pack(side=tk.LEFT)
 main_frame.pack_propagate(False)
