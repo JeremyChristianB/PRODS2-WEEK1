@@ -6,25 +6,167 @@ from PIL import Image, ImageTk
 
 def klasifikasi_page():
     klasifikasi_frame = tk.Frame(main_frame)
-    
+
+    # Frame untuk daftar model (frame atas)
+    daftar_model_frame = tk.Frame(klasifikasi_frame, bg='white')
+    daftar_model_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    # Label "Daftar Model"
+    daftar_model_label = tk.Label(daftar_model_frame, text='Daftar Model:', font=('Helvetica', 16))
+    daftar_model_label.pack(pady=10)
+
+    # Frame untuk "Model Pixel" (frame kiri)
+    model_pixel_frame = tk.Frame(daftar_model_frame, bg='white')
+    model_pixel_frame.pack(side=tk.LEFT, padx=20, anchor='n')
+
+    # Label untuk "Model Pixel" (tombol gambar)
+    model_pixel_image = Image.open("modelPixel.png")  # Ganti dengan path gambar model pixel
+    model_pixel_image = model_pixel_image.resize((150, 150), Image.ANTIALIAS)
+    model_pixel_image = ImageTk.PhotoImage(model_pixel_image)
+    model_pixel_label = tk.Label(model_pixel_frame, image=model_pixel_image)
+    model_pixel_label.image = model_pixel_image
+    model_pixel_label.bind("<Button-1>", lambda event, page=modelPixel_page: switch_page(event, page))
+    model_pixel_label.pack(pady=10,padx=20)
+
+    # Frame untuk "Model Grid" (frame kanan)
+    model_grid_frame = tk.Frame(daftar_model_frame, bg='white')
+    model_grid_frame.pack(side=tk.RIGHT, padx=20, anchor='n')
+
+    # Label untuk "Model Grid" (tombol gambar)
+    model_grid_image = Image.open("modelGrid.png")  # Ganti dengan path gambar model grid
+    model_grid_image = model_grid_image.resize((150, 150), Image.ANTIALIAS)
+    model_grid_image = ImageTk.PhotoImage(model_grid_image)
+    model_grid_label = tk.Label(model_grid_frame, image=model_grid_image)
+    model_grid_label.image = model_grid_image
+    model_grid_label.bind("<Button-1>", lambda event, page=modelGrid_page: switch_page(event, page))
+    model_grid_label.pack(pady=10,padx=30)
+
     klasifikasi_frame.pack(pady=20, side=tk.RIGHT)  # Frame untuk elemen-elemen baru diletakkan di sebelah kanan
-    
-    # Dropdown dengan judul "Daftar Daerah"
-    daftar_daerah_label = tk.Label(klasifikasi_frame, text='Daftar Daerah', font=('Helvetica', 16))
-    daftar_daerah_label.pack(pady=10)
-    
+
+def modelGrid_page():
+    # Frame atas (bagian kiri)
+    atas_frame = tk.Frame(main_frame, bg='white')
+    atas_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    # Label "Daftar Sentinel" di atas kiri
+    daftar_sentinel_label = tk.Label(atas_frame, text='Daftar Sentinel', font=('Helvetica', 16))
+    daftar_sentinel_label.pack(side=tk.LEFT, padx=20, pady=10)
+
+    # Frame atas (bagian kanan)
+    dropdown_frame = tk.Frame(atas_frame, bg='white')
+    dropdown_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
+    # Dropdown "Pilih Daerah"
+    pilih_daerah_label = tk.Label(dropdown_frame, text='Pilih Daerah:', font=('Helvetica', 12))
+    pilih_daerah_label.pack(pady=10)
+
     daerah_var = tk.StringVar()
-    daerah_dropdown = ttk.Combobox(klasifikasi_frame, textvariable=daerah_var,
-                                   values=['Jawa Barat', 'Jawa Tengah', 'Jawa Timur', 'Sumatera Barat', 'Sumatera Utara'])
-    daerah_dropdown.pack(pady=10)
+    daerah_dropdown = ttk.Combobox(dropdown_frame, textvariable=daerah_var,
+                                   values=['Jawa Barat', 'Jawa Timur', 'Jawa Tengah', 'Sumatera Barat', 'Sumatera Timur'])
+    daerah_dropdown.pack(pady=5)
+
+    # Dropdown "Pilih Tanggal"
+    pilih_tanggal_label = tk.Label(dropdown_frame, text='Pilih Tanggal:', font=('Helvetica', 12))
+    pilih_tanggal_label.pack(pady=10)
+
+    tanggal_var = tk.StringVar()
+    tanggal_dropdown = ttk.Combobox(dropdown_frame, textvariable=tanggal_var,
+                                    values=['Tanggal 1', 'Tanggal 2', 'Tanggal 3', 'Tanggal 4', 'Tanggal 5'])
+    tanggal_dropdown.pack(pady=5)
+
+    # Tombol "Cari Sentinel"
+    cari_sentinel_btn = tk.Button(dropdown_frame, text='Cari Sentinel', font=('Helvetica', 14), command=cari_sentinel)
+    cari_sentinel_btn.pack(pady=10)
+
+    # Frame bawah
+    bawah_frame = tk.Frame(main_frame, bg='white')
+    bawah_frame.pack(fill=tk.BOTH, expand=True)
+
+    # Tabel daftar sentinel dengan 5 kolom
+    tabel = ttk.Treeview(bawah_frame, columns=("No", "Nama Sentinel", "Nama Daerah", "Deskripsi", "Tanggal"))
+
+    # Set the column headings
+    tabel.heading("#1", text="No")
+    tabel.heading("#2", text="Nama Sentinel")
+    tabel.heading("#3", text="Nama Daerah")
+    tabel.heading("#4", text="Deskripsi")
+    tabel.heading("#5", text="Tanggal")
+
+    # Define column widths
+    tabel.column("#1", width=50)
+    tabel.column("#2", width=150)
+    tabel.column("#3", width=150)
+    tabel.column("#4", width=200)
+    tabel.column("#5", width=100)
+
+    # Insert sample data (you can replace this with your data)
+    for i in range(1, 11):
+        tabel.insert("", "end", values=(i, f"Sentinel-{i}", f"Daerah-{i}", f"Deskripsi-{i}", f"Tanggal-{i}"))
+
+    tabel.pack(fill=tk.BOTH, expand=True)
     
-    # Tombol "Choose Files"
-    choose_files_btn = tk.Button(klasifikasi_frame, text='Choose Files', font=('Helvetica', 14), command=choose_files)
-    choose_files_btn.pack(pady=10)
-    
-    # Tombol "Mulai Klasifikasi"
-    mulai_klasifikasi_btn = tk.Button(klasifikasi_frame, text='Mulai Klasifikasi', font=('Helvetica', 16), command=start_classification)
-    mulai_klasifikasi_btn.pack(pady=20)
+def modelPixel_page():
+    # Frame atas (bagian kiri)
+    atas_frame = tk.Frame(main_frame, bg='white')
+    atas_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    # Label "Daftar Sentinel" di atas kiri
+    daftar_sentinel_label = tk.Label(atas_frame, text='Daftar Sentinel', font=('Helvetica', 16))
+    daftar_sentinel_label.pack(side=tk.LEFT, padx=20, pady=10)
+
+    # Frame atas (bagian kanan)
+    dropdown_frame = tk.Frame(atas_frame, bg='white')
+    dropdown_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
+    # Dropdown "Pilih Daerah"
+    pilih_daerah_label = tk.Label(dropdown_frame, text='Pilih Daerah:', font=('Helvetica', 12))
+    pilih_daerah_label.pack(pady=10)
+
+    daerah_var = tk.StringVar()
+    daerah_dropdown = ttk.Combobox(dropdown_frame, textvariable=daerah_var,
+                                   values=['Jawa Barat', 'Jawa Timur', 'Jawa Tengah', 'Sumatera Barat', 'Sumatera Timur'])
+    daerah_dropdown.pack(pady=5)
+
+    # Dropdown "Pilih Tanggal"
+    pilih_tanggal_label = tk.Label(dropdown_frame, text='Pilih Tanggal:', font=('Helvetica', 12))
+    pilih_tanggal_label.pack(pady=10)
+
+    tanggal_var = tk.StringVar()
+    tanggal_dropdown = ttk.Combobox(dropdown_frame, textvariable=tanggal_var,
+                                    values=['Tanggal 1', 'Tanggal 2', 'Tanggal 3', 'Tanggal 4', 'Tanggal 5'])
+    tanggal_dropdown.pack(pady=5)
+
+    # Tombol "Cari Sentinel"
+    cari_sentinel_btn = tk.Button(dropdown_frame, text='Cari Sentinel', font=('Helvetica', 14), command=cari_sentinel)
+    cari_sentinel_btn.pack(pady=10)
+
+    # Frame bawah
+    bawah_frame = tk.Frame(main_frame, bg='white')
+    bawah_frame.pack(fill=tk.BOTH, expand=True)
+
+    # Tabel daftar sentinel dengan 5 kolom
+    tabel = ttk.Treeview(bawah_frame, columns=("No", "Nama Sentinel", "Nama Daerah", "Deskripsi", "Tanggal"))
+
+    # Set the column headings
+    tabel.heading("#1", text="No")
+    tabel.heading("#2", text="Nama Sentinel")
+    tabel.heading("#3", text="Nama Daerah")
+    tabel.heading("#4", text="Deskripsi")
+    tabel.heading("#5", text="Tanggal")
+
+    # Define column widths
+    tabel.column("#1", width=50)
+    tabel.column("#2", width=150)
+    tabel.column("#3", width=150)
+    tabel.column("#4", width=200)
+    tabel.column("#5", width=100)
+
+    # Insert sample data (you can replace this with your data)
+    for i in range(1, 11):
+        tabel.insert("", "end", values=(i, f"Sentinel-{i}", f"Daerah-{i}", f"Deskripsi-{i}", f"Tanggal-{i}"))
+
+    tabel.pack(fill=tk.BOTH, expand=True)
+
     
 def about_page():
     about_frame = tk.Frame(main_frame)
@@ -70,10 +212,15 @@ def hitung_page():
     deskripsi_label = tk.Label(deskripsi_frame,bg='green', text=deskripsi_text)
     deskripsi_label.pack(pady=10)
 
-# ...
 
+def cari_sentinel():
+    # Fungsi yang akan dijalankan ketika tombol "Cari Sentinel" ditekan
+    # Anda dapat menambahkan kode untuk mencari sentinel di sini
+    pass
 
-    
+def switch_page(event, new_page):
+    delete_pages()
+    new_page()    
 
 def hide_indicators():
     klasifikasi_indicate.config(bg='#c3c3c3')
