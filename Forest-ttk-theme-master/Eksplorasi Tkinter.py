@@ -14,7 +14,15 @@ def klasifikasi_page():
     # Label "Daftar Model"
     daftar_model_label = tk.Label(daftar_model_frame, text='Daftar Model:', font=('Helvetica', 16))
     daftar_model_label.pack(pady=10)
-
+    
+    # Label "Daftar Model"
+    daftar_model_label = tk.Label(daftar_model_frame, text='Model Pixel: Nilai diambil berdasarkan ukuran satu pixel', font=('Helvetica', 12))
+    daftar_model_label.pack(pady=10)
+    
+    # Label "Daftar Model"
+    daftar_model_label = tk.Label(daftar_model_frame, text='Model Grid: Nilai diambil berdasarkan kumupulan beberapa pixel', font=('Helvetica', 12))
+    daftar_model_label.pack(pady=10)
+    
     # Frame untuk "Model Pixel" (frame kiri)
     model_pixel_frame = tk.Frame(daftar_model_frame, bg='white')
     model_pixel_frame.pack(side=tk.LEFT, padx=20, anchor='n')
@@ -75,7 +83,7 @@ def modelGrid_page():
     tanggal_dropdown.pack(pady=5)
 
     # Tombol "Cari Sentinel"
-    cari_sentinel_btn = tk.Button(dropdown_frame, text='Cari Sentinel', font=('Helvetica', 14), command=cari_sentinel)
+    cari_sentinel_btn = tk.Button(dropdown_frame, text='Cari Sentinel', font=('Helvetica', 14), command=lambda: switch_page(None, hasilKlasifikasi_page))
     cari_sentinel_btn.pack(pady=10)
 
     # Frame bawah
@@ -137,7 +145,7 @@ def modelPixel_page():
     tanggal_dropdown.pack(pady=5)
 
     # Tombol "Cari Sentinel"
-    cari_sentinel_btn = tk.Button(dropdown_frame, text='Cari Sentinel', font=('Helvetica', 14), command=cari_sentinel)
+    cari_sentinel_btn = tk.Button(dropdown_frame, text='Cari Sentinel', font=('Helvetica', 14), command=lambda: switch_page(None, hasilKlasifikasi_page))
     cari_sentinel_btn.pack(pady=10)
 
     # Frame bawah
@@ -166,13 +174,59 @@ def modelPixel_page():
         tabel.insert("", "end", values=(i, f"Sentinel-{i}", f"Daerah-{i}", f"Deskripsi-{i}", f"Tanggal-{i}"))
 
     tabel.pack(fill=tk.BOTH, expand=True)
+    
+def hasilKlasifikasi_page():
+    hasil_klasifikasi_frame = tk.Frame(main_frame, bg='white')
+
+    # Frame kiri
+    frame_kiri = tk.Frame(hasil_klasifikasi_frame)
+    frame_kiri.pack(side=tk.LEFT, padx=20)
+
+    # Gambar posisinya di tengah
+    gambar_label = tk.Label(frame_kiri, text='Gambar Center', font=('Helvetica', 12), justify="center")
+    gambar_label.pack()
+
+    # Frame kanan
+    frame_kanan = tk.Frame(hasil_klasifikasi_frame)
+    frame_kanan.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
+    # Frame atas (deskripsi)
+    frame_atas = tk.Frame(frame_kanan, bg='white')
+    frame_atas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    # Deskripsi "Hasil Klasifikasi"
+    desc_label = tk.Label(frame_atas, wraplength=400, justify="center", text='Deskripsi Hasil Klasifikasi', font=('Helvetica', 12))
+    desc_label.pack(pady=10,padx=20)
+
+    # Frame bawah (menu "Choose files or browse files" dan tombol "Mulai Klasifikasi")
+    frame_bawah = tk.Frame(frame_kanan, bg='white')
+    frame_bawah.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+
+    # Menu "Choose files or browse files"
+    menu_label = tk.Label(frame_bawah, text='Menu:\n\nChoose files or browse files', font=('Helvetica', 12), justify="left")
+    menu_label.pack(pady=10)
+
+    # Tombol "Mulai Klasifikasi"
+    start_button = tk.Button(frame_bawah, text='Mulai Klasifikasi', font=('Helvetica', 16), command=lambda: switch_page(None, klasifikasi_page))
+    start_button.pack(pady=20)
+
+    hasil_klasifikasi_frame.pack(pady=20, side=tk.RIGHT)  # Frame untuk elemen-elemen baru diletakkan di sebelah kanan
+
 
     
 def about_page():
     about_frame = tk.Frame(main_frame)
     
-    lb = tk.Label(about_frame, text='About Page\n\nPage: 3', font=('Bold', 30))
-    lb.pack()
+    label1 = tk.Label(about_frame, text='About Reforestation', font=('Bold', 30))
+    label1.pack(pady=20)
+    
+    label2 = tk.Label(about_frame, text='Our Mission', font=('Bold', 20))
+    label2.pack(pady=10)
+    
+    mission_text = "Kami membangun aplikasi ini untuk memudahkan petani dalam pemilihan tanaman yang akan ditanam dan estimasi lahan yang diperlukan"
+
+    label3 = tk.Label(about_frame, text=mission_text, font=('Normal', 12), wraplength=400, justify="center")
+    label3.pack(pady=10)
     
     about_frame.pack(pady=20)
     
