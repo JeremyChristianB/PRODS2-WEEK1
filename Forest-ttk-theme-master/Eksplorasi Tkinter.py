@@ -2,7 +2,7 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
-
+from tkinter import filedialog
 
 def klasifikasi_page():
     klasifikasi_frame = tk.Frame(main_frame)
@@ -202,9 +202,9 @@ def hasilKlasifikasi_page():
     frame_bawah = tk.Frame(frame_kanan, bg='white')
     frame_bawah.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
-    # Menu "Choose files or browse files"
-    menu_label = tk.Label(frame_bawah, text='Menu:\n\nChoose files or browse files', font=('Helvetica', 12), justify="left")
-    menu_label.pack(pady=10)
+    # Tombol untuk membuka dialog pemilihan file
+    browse_button = tk.Button(frame_bawah, text='Browse File', font=('Helvetica', 14), command=browse_file)
+    browse_button.pack(pady=10)
 
     # Tombol "Mulai Klasifikasi"
     start_button = tk.Button(frame_bawah, text='Mulai Klasifikasi', font=('Helvetica', 16), command=lambda: switch_page(None, klasifikasi_page))
@@ -212,6 +212,11 @@ def hasilKlasifikasi_page():
 
     hasil_klasifikasi_frame.pack(pady=20, side=tk.RIGHT)  # Frame untuk elemen-elemen baru diletakkan di sebelah kanan
 
+def browse_file():
+    file_name = filedialog.askopenfilename(filetypes=[("All Files", "*.*"), ("Text Files", "*.txt"), ("Image Files", "*.png *.jpg")])
+    # Lakukan apa pun yang Anda perlukan dengan file yang dipilih
+    if file_name:
+        print(f"File terpilih: {file_name}")
 
     
 def about_page():
